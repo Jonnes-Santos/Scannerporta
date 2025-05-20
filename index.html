@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner de Portas | Verifique portas abertas online</title>
+    <meta name="description" content="Ferramenta profissional para verificação de portas abertas em servidores e dispositivos de rede">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --danger-color: #f72585;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f5f7fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        .subtitle {
+            color: var(--gray-color);
+            font-weight: 300;
+        }
+        
+        .scan-form {
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 500;
+            transition: background-color 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: var(--light-color);
+            min-height: 100px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: var(--gray-color);
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary-color);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .port-list {
+            list-style: none;
+        }
+        
+        .port-item {
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .port-open {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .port-number {
+            font-family: monospace;
+            background: #e9ecef;
+            padding: 2px 6px;
+            border-radius: 3px;
+        }
+        
+        .service-name {
+            color: var(--gray-color);
+            font-size: 0.9em;
+        }
+        
+        .error-message {
+            color: var(--danger-color);
+            text-align: center;
+            padding: 15px;
+        }
+        
+        .no-ports {
+            color: var(--gray-color);
+            text-align: center;
+            padding: 15px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: var(--gray-color);
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 20px auto;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Scanner de Portas On-line</h1>
+            <p class="subtitle">Verifique portas abertas em servidores e dispositivos de rede</p>
+        </header>
+        
+        <div class="scan-form">
+            <div class="form-group">
+                <label for="host">Host (IP ou domínio)</label>
+                <input type="text" id="host" placeholder="Exemplo: example.com ou 192.168.1.1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="ports">Portas para escanear</label>
+                <input type="text" id="ports" placeholder="Exemplo: 80 ou 1-1000 ou 22,80,443" value="1-1024" required>
+            </div>
+            
+            <button onclick="scanPorts()">Escanear Portas</button>
+        </div>
+        
+        <div id="result"></div>
+        
+        <footer>
+            <p>Ferramenta para uso profissional. Utilize apenas em sistemas que você tem permissão para testar.</p>
+            <p>Desenvolvido por Jonnes Santos.</p>
+        </footer>
+    </div>
+
+    <script>
+        async function scanPorts() {
+            const host = document.getElementById("host").value.trim();
+            const ports = document.getElementById("ports").value.trim();
+            const resultDiv = document.getElementById("result");
+
+            // Validação dos campos
+            if (!host || !ports) {
+                resultDiv.innerHTML = `
+                    <div class="error-message">
+                        Por favor, preencha todos os campos corretamente.
+                    </div>
+                `;
+                return;
+            }
+
+            // Mostrar estado de carregamento
+            resultDiv.innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Escaneando ${host}...</p>
+                    <p>Por favor, aguarde. Isso pode levar alguns instantes.</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch("https://Jonjonnes.pythonanywhere.com/scan", {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({ 
+                        host: host,
+                        ports: ports
+                    })
+                });
+
+                // Verificar se a resposta foi bem sucedida
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Verificar se há erros na resposta
+                if (data.error) {
+                    resultDiv.innerHTML = `
+                        <div class="error-message">
+                            Erro: ${data.error}
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Mostrar resultados
+                let resultHTML = `
+                    <div class="result-header">
+                        <h3>Resultado para: <strong>${data.host}</strong></h3>
+                        <div>IP: <strong>${data.ip}</strong></div>
+                    </div>
+                `;
+
+                if (data.open_ports && data.open_ports.length > 0) {
+                    resultHTML += `
+                        <p>Portas abertas encontradas:</p>
+                        <ul class="port-list">
+                    `;
+                    
+                    data.open_ports.forEach(item => {
+                        resultHTML += `
+                            <li class="port-item">
+                                <div>
+                                    <span class="port-number">Porta ${item.port}</span>
+                                    <span class="service-name">${item.service || 'serviço desconhecido'}</span>
+                                </div>
+                                <span class="port-open">ABERTA</span>
+                            </li>
+                        `;
+                    });
+                    
+                    resultHTML += `</ul>`;
+                } else {
+                    resultHTML += `
+                        <div class="no-ports">
+                            Nenhuma porta aberta foi encontrada no intervalo especificado.
+                        </div>
+                    `;
+                }
+
+                resultDiv.innerHTML = resultHTML;
+
+            } catch (error) {
+                console.error("Erro:", error);
+                resultDiv.innerHTML = `
+                    <div class="error-message">
+                        Ocorreu um erro ao conectar com o servidor. Por favor, tente novamente mais tarde.
+                        <br><br>
+                        Detalhes: ${error.message}
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
