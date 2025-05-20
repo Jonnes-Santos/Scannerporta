@@ -209,7 +209,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Scanner de Portas On-line</h1>
+            <h1>Scanner de Portas</h1>
             <p class="subtitle">Verifique portas abertas em servidores e dispositivos de rede</p>
         </header>
         
@@ -231,7 +231,7 @@
         
         <footer>
             <p>Ferramenta para uso profissional. Utilize apenas em sistemas que você tem permissão para testar.</p>
-            <p>Desenvolvido por Jonnes Santos.</p>
+            <p>© Por Jonnes Santos - Todos os direitos reservados</p>
         </footer>
     </div>
 
@@ -261,12 +261,14 @@
             `;
 
             try {
-                const response = await fetch("https://Jonjonnes.pythonanywhere.com/scan", {
+                const response = await fetch("https://jonjonnes.pythonanywhere.com/scan", {
                     method: "POST",
                     headers: { 
                         "Content-Type": "application/json",
                         "Accept": "application/json"
                     },
+                    mode: "cors",
+                    credentials: "omit",
                     body: JSON.stringify({ 
                         host: host,
                         ports: ports
