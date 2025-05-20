@@ -3,108 +3,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Port Scanner Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>JonScan Pro - Port Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --success: #4cc9f0;
-            --danger: #f72585;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --gray: #6c757d;
+            --bg-dark: #1a1a2e; /* Quase preto */
+            --primary-neon: #00ff66; /* Verde néon */
+            --secondary-neon: #00e0ff; /* Azul ciano néon */
+            --accent-purple: #8a2be2; /* Um toque de roxo */
+            --text-light: #e0e0e0;
+            --text-gray: #b0b0b0;
+            --border-color: #33334d;
+            --danger-neon: #ff3366; /* Vermelho néon para erros */
         }
         body {
-            font-family: 'Roboto', sans-serif;
-            background: #f5f7fa;
-            color: var(--dark);
+            font-family: 'Share Tech Mono', monospace; /* Fonte mais "hacker" */
+            background: var(--bg-dark);
+            color: var(--text-light);
             line-height: 1.6;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
         }
         .container {
-            max-width: 800px;
+            max-width: 850px; /* Um pouco mais largo */
             margin: 2rem auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background: #2a2a4e; /* Fundo do container um pouco mais claro que o body */
+            padding: 2.5rem; /* Mais padding */
+            border-radius: 12px; /* Bordas mais arredondadas */
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.2), 0 0 50px rgba(0, 224, 255, 0.1); /* Brilho néon */
+            border: 1px solid var(--border-color);
         }
-        h1 { color: var(--primary); margin-bottom: 0.5rem; }
-        .subtitle { color: var(--gray); margin-bottom: 2rem; }
-        .form-group { margin-bottom: 1.5rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-        input, button {
-            width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+        }
+        h1 {
+            font-family: 'Orbitron', sans-serif; /* Fonte futurista para o título */
+            color: var(--primary-neon);
+            text-shadow: 0 0 10px var(--primary-neon);
+            font-size: 2.8rem; /* Tamanho maior */
+            margin-bottom: 0.5rem;
+            letter-spacing: 2px;
+        }
+        .subtitle {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-weight: 700;
+            color: var(--secondary-neon);
+            text-shadow: 0 0 5px var(--secondary-neon);
+            font-size: 1.1rem;
+        }
+        input {
+            width: calc(100% - 20px); /* Ajuste para o padding */
+            padding: 0.8rem 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1.05rem;
+            background-color: #3e3e6b; /* Fundo do input */
+            color: var(--text-light);
+            caret-color: var(--primary-neon); /* Cor do cursor */
+            box-shadow: inset 0 0 8px rgba(0, 255, 102, 0.1);
+        }
+        input:focus {
+            outline: none;
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 0 2px rgba(0, 255, 102, 0.3), inset 0 0 8px rgba(0, 255, 102, 0.2);
         }
         button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        button:hover { background: var(--secondary); }
-        .result-container { margin-top: 2rem; border-top: 1px solid #eee; padding-top: 2rem; }
-        .port-card {
-            background: white;
-            border-left: 4px solid var(--primary);
+            width: 100%;
             padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 4px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            background: var(--primary-neon);
+            color: var(--bg-dark); /* Texto escuro para contraste */
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.3s ease, box-shadow 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
+        }
+        button:hover {
+            background: var(--secondary-neon);
+            color: var(--bg-dark);
+            box-shadow: 0 0 20px rgba(0, 224, 255, 0.6);
+        }
+        .result-container {
+            margin-top: 2.5rem;
+            border-top: 1px dashed var(--border-color); /* Linha tracejada */
+            padding-top: 2.5rem;
+        }
+        h3 {
+            color: var(--secondary-neon);
+            text-shadow: 0 0 8px var(--secondary-neon);
+            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            text-align: center;
+        }
+        .result-info {
+            background: #3e3e6b;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .result-info p {
+            margin: 0.5rem 0;
+            color: var(--text-light);
+        }
+        .port-card {
+            background: #2e2e5c; /* Fundo dos cards de porta */
+            border-left: 4px solid var(--primary-neon);
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.8rem;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.1);
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s ease;
         }
-        .port-open { color: var(--success); font-weight: 500; }
-        .loading { text-align: center; padding: 2rem; }
+        .port-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
+        }
+        .port-card div strong {
+            color: var(--secondary-neon);
+            font-size: 1.1em;
+        }
+        .port-card div {
+            color: var(--text-gray);
+        }
+        .port-open {
+            color: var(--primary-neon); /* Verde néon para OPEN */
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 1.1em;
+            text-shadow: 0 0 5px var(--primary-neon);
+        }
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: var(--secondary-neon);
+        }
         .spinner {
-            border: 4px solid rgba(0, 0, 0, 0.1);
+            border: 4px solid rgba(0, 224, 255, 0.2);
             border-radius: 50%;
-            border-top: 4px solid var(--primary);
-            width: 30px;
-            height: 30px;
+            border-top: 4px solid var(--secondary-neon);
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 1rem;
+            margin: 0 auto 1.5rem;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
         .error-message {
-            color: var(--danger);
-            background: #fff5f7;
-            padding: 1rem;
-            border-radius: 5px;
+            color: var(--danger-neon);
+            background: #3e2a3e; /* Fundo mais escuro para o erro */
+            padding: 1.2rem;
+            border-radius: 8px;
             margin-bottom: 1rem;
+            border: 1px solid var(--danger-neon);
+            text-shadow: 0 0 5px rgba(255, 51, 102, 0.5);
+        }
+        .error-message strong {
+            color: var(--danger-neon);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Port Scanner Pro</h1>
-            <p class="subtitle">Verifique portas abertas em qualquer servidor</p>
+            <h1>JonScan Pro</h1>
+            <p class="subtitle">Análise de Portas de Rede Avançada</p>
         </header>
-        
+
         <div class="scan-form">
             <div class="form-group">
-                <label for="host">Domínio ou IP</label>
-                <input type="text" id="host" placeholder="Ex: google.com" required>
+                <label for="host">ALVO (Domínio ou Endereço IP)</label>
+                <input type="text" id="host" placeholder="Ex: example.com ou 192.168.1.1" required>
             </div>
-            
+
             <div class="form-group">
-                <label for="ports">Portas (ex: 80 ou 1-1000 ou 22,80,443)</label>
+                <label for="ports">PORTAS (Ex: 80,443 ou 1-1000 ou 22,80,443)</label>
                 <input type="text" id="ports" value="80,443" required>
             </div>
-            
-            <button id="scanButton">Escanear Portas</button>
+
+            <button id="scanButton">INICIAR VARREDURA</button>
         </div>
-        
+
         <div class="result-container" id="result"></div>
     </div>
 
@@ -115,7 +217,7 @@
             document.getElementById('result').innerHTML = `
                 <div class="loading">
                     <div class="spinner"></div>
-                    <p>Escaneando portas...</p>
+                    <p>ANALISANDO O ALVO...</p>
                 </div>
             `;
         }
@@ -123,52 +225,58 @@
         function showError(message) {
             document.getElementById('result').innerHTML = `
                 <div class="error-message">
-                    <strong>Erro:</strong> ${message}
+                    <strong>ERRO DE CONEXÃO:</strong> ${message}<br>
+                    Verifique o alvo, as portas ou sua conexão de rede.
                 </div>
             `;
         }
 
         function showResults(data) {
             const resultDiv = document.getElementById('result');
-            
+
             if (!data.open_ports || data.open_ports.length === 0) {
-                showError(`Nenhuma porta aberta encontrada em ${data.host} (${data.ip})`);
+                showError(`Nenhuma porta aberta encontrada em ${data.host} (${data.ip}).`);
                 return;
             }
-            
+
             let html = `
-                <h3>Resultado para ${data.host}</h3>
-                <p>IP: <strong>${data.ip}</strong></p>
-                <p>Portas abertas:</p>
+                <h3>RELATÓRIO DE VARREDURA</h3>
+                <div class="result-info">
+                    <p>ALVO: <strong>${data.host}</strong></p>
+                    <p>IP RESOLVIDO: <strong>${data.ip}</strong></p>
+                    <p>STATUS: <span class="port-open">SCAN COMPLETO</span></p>
+                </div>
+                <h4>PORTAS DETECTADAS COMO ABERTAS:</h4>
             `;
-            
+
             data.open_ports.forEach(item => {
                 html += `
                     <div class="port-card">
                         <div>
                             <strong>Porta ${item.port}</strong>
-                            <div>Serviço: ${item.service}</div>
+                            <div>Serviço Detectado: ${item.service || 'Desconhecido'}</div>
                         </div>
                         <span class="port-open">${item.status}</span>
                     </div>
                 `;
             });
-            
+
             resultDiv.innerHTML = html;
         }
 
         async function startScan() {
             const host = document.getElementById('host').value.trim();
             const ports = document.getElementById('ports').value.trim();
-            
+
             if (!host || !ports) {
-                showError('Por favor, preencha todos os campos');
+                showError('Por favor, preencha o campo ALVO e PORTAS.');
                 return;
             }
-            
+
             showLoading();
-            
+
             try {
+                // A URL do seu backend PythonAnywhere
                 const response = await fetch('https://jonjonnes.pythonanywhere.com/scan', {
                     method: 'POST',
                     headers: {
@@ -179,22 +287,23 @@
                         ports: ports
                     })
                 });
-                
+
                 if (!response.ok) {
-                    throw new Error(`Erro ${response.status}`);
+                    const errorText = await response.text();
+                    throw new Error(`${response.status} - ${errorText || 'Erro desconhecido do servidor.'}`);
                 }
-                
+
                 const data = await response.json();
-                
+
                 if (data.error) {
                     showError(data.error);
                     return;
                 }
-                
+
                 showResults(data);
-                
+
             } catch (error) {
-                showError(`Falha na conexão: ${error.message}`);
+                showError(`Falha na conexão com o serviço de scan: ${error.message}.`);
                 console.error('Detalhes do erro:', error);
             }
         }
