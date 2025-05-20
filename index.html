@@ -7,17 +7,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #1a1a2e; /* Quase preto */
-            --primary-neon: #00ff66; /* Verde néon */
-            --secondary-neon: #00e0ff; /* Azul ciano néon */
-            --accent-purple: #8a2be2; /* Um toque de roxo */
+            --bg-dark: #1a1a2e; 
+            --primary-neon: #00ff66; 
+            --secondary-neon: #00e0ff; 
+            --accent-purple: #8a2be2; 
             --text-light: #e0e0e0;
             --text-gray: #b0b0b0;
             --border-color: #33334d;
-            --danger-neon: #ff3366; /* Vermelho néon para erros */
+            --danger-neon: #ff3366; 
         }
         body {
-            font-family: 'Share Tech Mono', monospace; /* Fonte mais "hacker" */
+            font-family: 'Share Tech Mono', monospace; 
             background: var(--bg-dark);
             color: var(--text-light);
             line-height: 1.6;
@@ -28,12 +28,12 @@
             min-height: 100vh;
         }
         .container {
-            max-width: 850px; /* Um pouco mais largo */
+            max-width: 850px;
             margin: 2rem auto;
-            background: #2a2a4e; /* Fundo do container um pouco mais claro que o body */
-            padding: 2.5rem; /* Mais padding */
-            border-radius: 12px; /* Bordas mais arredondadas */
-            box-shadow: 0 0 25px rgba(0, 255, 102, 0.2), 0 0 50px rgba(0, 224, 255, 0.1); /* Brilho néon */
+            background: #2a2a4e; 
+            padding: 2.5rem; 
+            border-radius: 12px; 
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.2), 0 0 50px rgba(0, 224, 255, 0.1); 
             border: 1px solid var(--border-color);
         }
         header {
@@ -42,10 +42,10 @@
             position: relative;
         }
         h1 {
-            font-family: 'Orbitron', sans-serif; /* Fonte futurista para o título */
+            font-family: 'Orbitron', sans-serif; 
             color: var(--primary-neon);
             text-shadow: 0 0 10px var(--primary-neon);
-            font-size: 2.8rem; /* Tamanho maior */
+            font-size: 2.8rem; 
             margin-bottom: 0.5rem;
             letter-spacing: 2px;
         }
@@ -66,14 +66,14 @@
             font-size: 1.1rem;
         }
         input {
-            width: calc(100% - 20px); /* Ajuste para o padding */
+            width: calc(100% - 20px); 
             padding: 0.8rem 10px;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 1.05rem;
-            background-color: #3e3e6b; /* Fundo do input */
+            background-color: #3e3e6b; 
             color: var(--text-light);
-            caret-color: var(--primary-neon); /* Cor do cursor */
+            caret-color: var(--primary-neon); 
             box-shadow: inset 0 0 8px rgba(0, 255, 102, 0.1);
         }
         input:focus {
@@ -85,7 +85,7 @@
             width: 100%;
             padding: 1rem;
             background: var(--primary-neon);
-            color: var(--bg-dark); /* Texto escuro para contraste */
+            color: var(--bg-dark); 
             border: none;
             border-radius: 6px;
             font-size: 1.2rem;
@@ -103,7 +103,7 @@
         }
         .result-container {
             margin-top: 2.5rem;
-            border-top: 1px dashed var(--border-color); /* Linha tracejada */
+            border-top: 1px dashed var(--border-color); 
             padding-top: 2.5rem;
         }
         h3 {
@@ -125,7 +125,7 @@
             color: var(--text-light);
         }
         .port-card {
-            background: #2e2e5c; /* Fundo dos cards de porta */
+            background: #2e2e5c; 
             border-left: 4px solid var(--primary-neon);
             padding: 1rem 1.5rem;
             margin-bottom: 0.8rem;
@@ -148,7 +148,7 @@
             color: var(--text-gray);
         }
         .port-open {
-            color: var(--primary-neon); /* Verde néon para OPEN */
+            color: var(--primary-neon); 
             font-weight: 700;
             text-transform: uppercase;
             font-size: 1.1em;
@@ -174,7 +174,7 @@
         }
         .error-message {
             color: var(--danger-neon);
-            background: #3e2a3e; /* Fundo mais escuro para o erro */
+            background: #3e2a3e; 
             padding: 1.2rem;
             border-radius: 8px;
             margin-bottom: 1rem;
@@ -276,7 +276,7 @@
             showLoading();
 
             try {
-                // A URL do seu backend PythonAnywhere
+                
                 const response = await fetch('https://jonjonnes.pythonanywhere.com/scan', {
                     method: 'POST',
                     headers: {
