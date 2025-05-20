@@ -142,12 +142,12 @@
         <div class="scan-form">
             <div class="form-group">
                 <label for="host">Domínio ou IP</label>
-                <input type="text" id="host" placeholder="Ex: bolsonarostore.com.br" required>
+                <input type="text" id="host" placeholder="Ex: exemplo.com.br" required>
             </div>
             
             <div class="form-group">
                 <label for="ports">Portas (ex: 80 ou 1-1000 ou 22,80,443)</label>
-                <input type="text" id="ports" value="80,443,22,21,3306,3389" required>
+                <input type="text" id="ports" value="80" required>
             </div>
             
             <button onclick="startScan()">Escanear Portas</button>
@@ -158,104 +158,98 @@
         </div>
     </div>
 
-    <script>
-        async function startScan() {
-            const host = document.getElementById('host').value.trim();
-            const ports = document.getElementById('ports').value.trim();
-            const resultDiv = document.getElementById('result');
-            
-            if (!host || !ports) {
-                showError('Por favor, preencha todos os campos');
-                return;
-            }
-            
-            showLoading();
-            
-            try {
-                const response = await fetch('https://jonjonnes.pythonanywhere.com/scan', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        host: host,
-                        ports: ports
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Erro ${response.status}`);
-                }
-                
-                const data = await response.json();
-                
-                if (data.error) {
-                    showError(data.error);
-                    return;
-                }
-                
-                showResults(data);
-                
-            } catch (error) {
-                showError(`Falha na conexão: ${error.message}`);
-                console.error('Erro:', error);
-            }
+    <!-- Mantenha todo o estilo anterior, apenas atualize o script: -->
+<script>
+    async function startScan() {
+        const host = document.getElementById('host').value.trim();
+        const ports = document.getElementById('ports').value.trim();
+        const resultDiv = document.getElementById('result');
+        
+        if (!host || !ports) {
+            showError('Por favor, preencha todos os campos');
+            return;
         }
         
-        function showLoading() {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = `
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Escaneando portas...</p>
-                </div>
-            `;
-        }
+        showLoading();
         
-        function showError(message) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = `
-                <div class="error-message">
-                    <strong>Erro:</strong> ${message}
-                </div>
-            `;
-        }
-        
-        function showResults(data) {
-            const resultDiv = document.getElementById('result');
+        try {
+            // Adicione um timestamp para evitar cache
+            const apiUrl = `https://jonjonnes.pythonanywhere.com/scan?t=${Date.now()}`;
             
-            if (!data.open_ports || data.open_ports.length === 0) {
-                resultDiv.innerHTML = `
-                    <div class="error-message">
-                        Nenhuma porta aberta encontrada em ${data.host} (${data.ip})
-                    </div>
-                `;
-                return;
-            }
-            
-            let html = `
-                <h3>Resultados para ${data.host} (${data.ip})</h3>
-                <p>Portas abertas encontradas:</p>
-            `;
-            
-            data.open_ports.forEach(port => {
-                html += `
-                    <div class="port-card">
-                        <div>
-                            <strong>Porta ${port.port}</strong>
-                            <div>Serviço: ${port.service}</div>
-                        </div>
-                        <span class="port-open">ABERTA</span>
-                    </div>
-                `;
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    host: host,
+                    ports: ports
+                })
             });
             
-            html += `
-                <p><small>Escaneamento concluído em ${new Date().toLocaleString()}</small></p>
-            `;
+            if (!response.ok) {
+                throw new Error(`Erro ${response.status}`);
+            }
             
-            resultDiv.innerHTML = html;
+            const data = await response.json();
+            
+            if (data.error) {
+                showError(data.error);
+                return;
+            }
+            
+            // Debug: mostrar dados completos
+            console.log("Resposta completa:", data);
+            
+            if (!data.open_ports || data.open_ports.length === 0) {
+                showError(`Nenhuma porta aberta detectada em ${host} (${data.ip})<br>
+                <small>Obs: Alguns servidores podem bloquear verificações de porta.</small>`);
+                return;
+            }
+            
+            showResults(data);
+            
+        } catch (error) {
+            showError(`Falha na conexão: ${error.message}<br>
+            <small>Se persistir, tente com um domínio diferente.</small>`);
+            console.error('Detalhes do erro:', error);
         }
-    </script>
+    }
+
+    function showResults(data) {
+        const resultDiv = document.getElementById('result');
+        let html = `
+            <h3>Resultado para ${data.host}</h3>
+            <p>IP: <strong>${data.ip}</strong></p>
+            <div class="port-grid">
+        `;
+        
+        data.open_ports.forEach(port => {
+            html += `
+                <div class="port-card">
+                    <div class="port-number">${port}</div>
+                    <div class="port-status open">ABERTA</div>
+                    <div class="port-service">${getServiceName(port)}</div>
+                </div>
+            `;
+        });
+        
+        html += `</div>`;
+        resultDiv.innerHTML = html;
+    }
+
+    function getServiceName(port) {
+        const services = {
+            80: "HTTP",
+            443: "HTTPS",
+            22: "SSH",
+            21: "FTP",
+            25: "SMTP",
+            3306: "MySQL",
+            3389: "RDP"
+        };
+        return services[port] || "Desconhecido";
+    }
+</script>
 </body>
 </html>
